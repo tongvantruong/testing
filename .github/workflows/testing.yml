@@ -26,7 +26,7 @@ jobs:
           echo "1234"
 
   main:
-    needs: [next]
+    needs: [check_action, next]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
