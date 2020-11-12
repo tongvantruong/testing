@@ -13,6 +13,9 @@ jobs:
       - name: Define type
         id: define_type
         run: |
+          echo ${{ github.event.action == 'labeled' }}
+          echo ${{ contains(github.event.pull_request.labels.*.name, 'bug') }}
+          echo ${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}
           echo "::set-output name=is_label::${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}"
 
   main:
