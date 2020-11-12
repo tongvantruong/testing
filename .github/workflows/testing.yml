@@ -17,9 +17,16 @@ jobs:
           echo ${{ contains(github.event.pull_request.labels.*.name, 'bug') }}
           echo ${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}
           echo "::set-output name=is_label::${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}"
+  next:
+    needs: [check_action]
+    runs-on: ubuntu-latest
+    steps:
+      - name: testing
+        run: |
+          echo "1234"
 
   main:
-    needs: [check_action]
+    needs: [next]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
