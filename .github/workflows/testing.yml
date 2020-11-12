@@ -1,0 +1,33 @@
+name: example
+on:
+  pull_request:
+    types:
+      - labeled
+      - synchronize
+jobs:
+  check_action:
+    runs-on: ubuntu-latest
+    outputs:
+      action_name: ${{ steps.define_type.outputs.action_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Define type
+        id: define_type
+        run: |
+          echo "::set-output name=action_name::${{ github.event.action }}"
+
+  main:
+    needs: [check_action]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Show action name 1
+        if: ${{ needs.check_action.outputs.action_name }} = 'labeled' }}
+        run: |
+          echo "This workflow was triggered by 'labeled'"
+      - name: Show action name 2
+        if: ${{ needs.check_action.outputs.action_name }} != 'labeled' }}
+        run: |
+          echo "This workflow was triggered NOT by 'labeled'"
