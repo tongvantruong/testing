@@ -24,7 +24,7 @@ jobs:
       - name: Show action name 1
         if: ${{ needs.check_action.outputs.action_name }} == 'labeled' }}
         run: |
-          echo ${ needs.check_action.outputs.action_name }
+          echo  ${{ needs.check_action.outputs.action_name }}
           echo "This workflow was triggered by 'labeled'"
       - name: Show action name 2
         if: ${{ needs.check_action.outputs.action_name }} != 'labeled' }}
