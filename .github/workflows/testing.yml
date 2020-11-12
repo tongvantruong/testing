@@ -23,7 +23,7 @@ jobs:
     steps:
       - name: testing
         run: |
-          echo "1234"
+          echo '{"hello": "world"}' | jq '. + {foo: "FOO"}'
 
   main:
     needs: [check_action, next]
