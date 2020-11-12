@@ -23,10 +23,12 @@ jobs:
     steps:
       - name: testing
         run: |
-          a='{"hello": "world"}'
-          echo ${a}
-          b=$($a | jq '. + {foo: "FOO"}')
-          echo ${b}
+          a='{"hello": "world"}' | jq '. + {foo: "FOO"}'
+          echo $a
+          b='{"hello": "world"}'
+          echo $b
+          c=$($b | jq '. + {foo: "FOO"}')
+          echo ${c}
 
   main:
     needs: [check_action, next]
