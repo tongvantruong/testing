@@ -24,9 +24,8 @@ jobs:
       - name: testing
         run: |
           a='{"hello": "world"}'
-          b=$a | jq '. + {foo: "FOO"}'
-
           echo ${a}
+          b=$($a | jq '. + {foo: "FOO"}')
           echo ${b}
 
   main:
