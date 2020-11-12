@@ -22,10 +22,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Show action name 1
-        if: ${{ needs.check_action.outputs.is_label }}
+        if: ${{ needs.check_action.outputs.is_label == true }}
         run: |
           echo "This workflow was triggered by 'labeled'"
       - name: Show action name 2
-        if: ${{ !needs.check_action.outputs.is_label }}
+        if: ${{ !needs.check_action.outputs.is_label == false }}
         run: |
           echo "This workflow was triggered NOT by 'labeled'"
