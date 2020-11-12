@@ -23,9 +23,7 @@ jobs:
     steps:
       - name: testing
         run: |
-          a1={"hello": "world"} | jq '. + {foo: "FOO"}'
-          echo ${a1}
-          a2=$('{"hello": "world"}'' | jq '. + {foo: "FOO"}')
+          a2=$('{"hello": "world"}' | jq '. + {foo: "FOO"}')
           echo ${a2}
           b='{"hello": "world"}'
           echo ${b}
