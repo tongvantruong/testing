@@ -27,7 +27,7 @@ jobs:
           echo ${a2}
           b='{"hello": "world"}'
           echo ${b}
-          c=$($b | jq '. + {foo: "FOO"}')
+          c="$b" | jq '. + {foo: "FOO"}'
           echo ${c}
 
   main:
