@@ -8,14 +8,14 @@ jobs:
   handle_slash_command:
     runs-on: ubuntu-20.04
     steps:
+      - name: Logs
+        run: |
+          echo ${{ toJson(github) }}
+
       - uses: xt0rted/pull-request-comment-branch@v1.2.0
         id: comment_branch
         with:
           repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
-      - name: Logs
-        run: |
-          echo ${{ github.event.number }}
 
       - name: Slash command dispatch
         id: scd
