@@ -1,0 +1,73 @@
+name: Dispatch E2E
+
+on:
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: "Browser to run E2E (chrome/firefox)"
+        default: "chrome"
+        required: false
+      pr_number:
+        description: "No. of the PR which triggers this workflow (123)"
+        required: true
+
+env:
+  AWS_ECR_ACCOUNT_URL: 351540792571.dkr.ecr.ap-northeast-1.amazonaws.com
+
+jobs:
+  build_dev:
+    if: |
+      github.event.inputs.browser == 'chrome' ||
+      github.event.inputs.browser == 'firefox'
+    runs-on: ubuntu-20.04
+    outputs:
+      image: ${{ steps.build_and_push_docker_image.outputs.image }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build and push docker image
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEV_ECR_REPOSITORY: dev/usergram/usergram-front
+
+        id: build_and_push_docker_image
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin ${AWS_ECR_ACCOUNT_URL}
+          image="${AWS_ECR_ACCOUNT_URL}/${AWS_DEV_ECR_REPOSITORY}:${{ github.sha }}"
+
+          docker build -t ${image} .
+          docker push ${image}
+
+          # we need to remove the ${AWS_ECR_ACCOUNT_URL} part as it contains aws account id and region (Github secrets). Otherwise, github action will ignore the job output
+          echo "::set-output name=image::${image#*/}"
+
+  trigger_e2e:
+    runs-on: ubuntu-20.04
+    needs: [build_dev]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare payload for workflow_dispatch
+        id: prepare_payload
+        run: |
+          usergram_front_image="${AWS_ECR_ACCOUNT_URL}/${{ needs.build_dev.outputs.image }}"
+          prs="${{ github.event.repository.full_name }}#${{ github.event.inputs.pr_number }}"
+          browser="${{ github.event.inputs.browser }}"
+          echo ${{ github.event.inputs.pr_number }}
+
+          payload=$(cat e2e.config.json | jq --arg usergram_front_image ${usergram_front_image} --arg browser ${browser} --arg prs ${prs} \
+            '.usergram_front_image=$usergram_front_image | .browser=$browser | .prs=$prs' | tr -d '\n' | tr -d ' ')
+
+          echo "::set-output name=payload::${payload}"
+
+      - name: Invoke e2e workflow in eks-prod
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: usergram-e2e
+          repo: bebit/eks-prod
+          ref: master # we ALWAYS have to use the master-branch version of the usergram-e2e workflow in eks-prod
+          token: ${{ secrets.BEBIT_MACHINE_GITHUB_TOKEN }}
+          inputs: ${{ steps.prepare_payload.outputs.payload }}
