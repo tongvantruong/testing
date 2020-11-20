@@ -13,7 +13,7 @@ jobs:
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Logs
+      - name: Logs 2
         run: |
           echo ${{ github.event.number }}
 
