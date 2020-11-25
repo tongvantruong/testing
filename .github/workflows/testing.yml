@@ -1,9 +1,8 @@
-name: example
+name: Cron
 on:
-  pull_request:
-    types:
-      - labeled
-      - synchronize
+  schedule:
+  - cron: "*/5 * * * *" # every 5 minutes
+
 jobs:
   check_action:
     runs-on: ubuntu-latest
