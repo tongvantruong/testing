@@ -1,44 +1,25 @@
-name: Cron
+name: (dev) auto-upload-external-lib
+
 on:
-  schedule:
-  - cron: "*/5 * * * *" # every 5 minutes
+  pull_request:
+    types: opened
+
+env:
+  S3_EXTERNAL_LIB: s3://bebit-test-bucket/data-pipelines/external-lib
+  PYMYSQL_FILE_NAME: PyMySQL-0.10.0-py2.py3-none-any.whl
+  PYMYSQL_S3_URI: ${S3_EXTERNAL_LIB}/pymysql/${PYMYSQL_FILE_NAME}
+  JOBLIB_FILE_NAME: joblib-0.17.0-py3-none-any.whl
+  JOBLIB_S3_URI: ${S3_EXTERNAL_LIB}/joblib/${JOBLIB_FILE_NAME}
 
 jobs:
-  check_action:
-    runs-on: ubuntu-latest
-    outputs:
-      is_label: ${{ steps.define_type.outputs.is_label }}
-    steps:
-      - name: Define type
-        id: define_type
-        run: |
-          echo ${{ github.event.action == 'labeled' }}
-          echo ${{ contains(github.event.pull_request.labels.*.name, 'bug') }}
-          echo ${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}
-          echo "::set-output name=is_label::${{ github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'bug')}}"
-  next:
-    needs: [check_action]
+  execute:
     runs-on: ubuntu-latest
     steps:
-      - name: testing
+      - uses: actions/checkout@v2
+      - name: Download files from S3 to local
         run: |
-          b='{"hello": "world"}'
-          echo ${b}
-          c=$b | jq '.browser |= "chrome"'
-          echo ${c}
+          echo ${PYMYSQL_S3_URI}
+          
 
-  main:
-    needs: [check_action, next]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Show action name 1
-        if: ${{ needs.check_action.outputs.is_label == 'true' }}
-        run: |
-          echo "This workflow was triggered by 'labeled'"
-      - name: Show action name 2
-        if: ${{ needs.check_action.outputs.is_label != 'true' }}
-        run: |
-          echo ${{ needs.check_action.outputs.is_label }}
-          echo "This workflow was triggered NOT by 'labeled'"
+          
+
