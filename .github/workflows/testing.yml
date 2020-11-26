@@ -23,7 +23,7 @@ jobs:
           echo "::set-output name=joblib_s3_uri::${joblib_s3_uri}"
       - name: Download files from S3 to local
         run: |
-          echo "---- start ----"
+          echo "---- start 2 ----"
           echo ${{ steps.prepare-variables.outputs.pymysql_s3_uri }}
           
 
