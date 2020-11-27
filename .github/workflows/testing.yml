@@ -18,4 +18,5 @@ jobs:
           mkdir truong
           cd truong
           touch test.txt
+          cd ..
           ls truong/test.txt
