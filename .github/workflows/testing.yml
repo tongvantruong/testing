@@ -4,28 +4,13 @@ on:
   pull_request:
     types: opened
 
-env:
-  S3_EXTERNAL_LIB: s3://bebit-test-bucket/data-pipelines/external-lib
-  PYMYSQL_FILE_NAME: PyMySQL-0.10.0-py2.py3-none-any.whl
-  JOBLIB_FILE_NAME: joblib-0.17.0-py3-none-any.whl
-
 jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Prepare variables
-        id: prepare-variables
+      - name: testing
         run: |
-          pymysql_s3_uri=${S3_EXTERNAL_LIB}/pymysql/${PYMYSQL_FILE_NAME}
-          joblib_s3_uri=${S3_EXTERNAL_LIB}/joblib/${JOBLIB_FILE_NAME}
-          echo "::set-output name=pymysql_s3_uri::${pymysql_s3_uri}"
-          echo "::set-output name=joblib_s3_uri::${joblib_s3_uri}"
-      - name: Download files from S3 to local
-        run: |
-          echo "---- start 2 ----"
-          echo ${{ steps.prepare-variables.outputs.pymysql_s3_uri }}
-          
-
-          
-
+          mkdir truong
+          cd truong
+          touch test.txt
