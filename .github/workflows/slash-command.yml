@@ -1,8 +1,6 @@
 name: Handle Slash Command
 
-on:
-  issue_comment:
-    types: [created]
+on: [pull_request]
 
 jobs:
   handle_slash_command:
