@@ -12,11 +12,17 @@ jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: testing 23
-        run: |
-          curl \
-            -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }} \
-            -d '{"state":"state", "target_url": "https://github.com/tongvantruong/testing/pull/15/checks?check_run_id=1496773513"}'
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.BEBIT_MACHINE_GITHUB_TOKEN }}
+          commit-message: "github actions: npm run update:e2e-date"
+          title: "[e2e][auto] Change date in e2e tests"
+          draft: false
+          labels: auto-created
+          branch: update-e2e-date-${ date +"%Y-%m-%d-%H-%M-%S" }
+          body: |
+            # Why
+            - Hard code date in e2e need to be updated every 30 days.
+            # What
+            - Change dates in e2e tests
