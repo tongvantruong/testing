@@ -15,7 +15,7 @@ jobs:
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
         with:
-          token: ${{ secrets.BEBIT_MACHINE_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "github actions: npm run update:e2e-date"
           title: "[e2e][auto] Change date in e2e tests"
           draft: false
