@@ -10,6 +10,6 @@ jobs:
 
       - name: Slash command dispatch
         run: |
-          echo ${GITHUB_REF##*/}
+          echo ${{github.head_ref}}
           git commit --allow-empty -m "trigger GitHub actions"
           git push ${GITHUB_REF##*/} -f
