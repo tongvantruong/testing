@@ -10,6 +10,6 @@ jobs:
 
       - name: Slash command dispatch
         run: |
-          git commit --amend --no-edit
+          git commit --amend --no-edit --allow-empty
           echo ${GITHUB_REF##*/}
           git push ${GITHUB_REF##*/} -f
