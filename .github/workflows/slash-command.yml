@@ -6,29 +6,10 @@ jobs:
   handle_slash_command:
     runs-on: ubuntu-20.04
     steps:
-      - uses: xt0rted/pull-request-comment-branch@v1.2.0
-        id: comment_branch
-        with:
-          repo_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      - uses: actions/checkout@v2
 
       - name: Slash command dispatch
-        id: scd
-        uses: peter-evans/slash-command-dispatch@v2
-        with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          commands: |
-            e2e
-          dispatch-type: workflow
-          static-args: |
-            ref=${{ steps.comment_branch.outputs.head_ref }}
-            pr_number=${{ github.event.issue.number }}
-
-      # Only show these errors https://github.com/peter-evans/slash-command-dispatch/blob/master/docs/workflow-dispatch.md#validation-errors
-      - name: Show error message to comment if there is error
-        if: steps.scd.outputs.error-message
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          comment-id: ${{ github.event.comment.id }}
-          body: |
-            > ${{ steps.scd.outputs.error-message }}
+        run: |
+          git commit --amend --no-edit
+          echo ${GITHUB_REF##*/}
+          git push ${GITHUB_REF##*/} -f
