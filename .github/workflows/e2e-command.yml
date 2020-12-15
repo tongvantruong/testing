@@ -9,5 +9,5 @@ jobs:
     steps:
       - name: Restart workflow
         run: |
-          URL=https://api.github.com/repos/${{github.repository}}/actions/runs/1555614204/rerun
-          curl -X POST -U "tongvantruong:${{secrets.GITHUB_TOKEN}}" $URL
+          URL=https://api.github.com/repos/${{github.repository}}/actions/runs/1555776046/rerun
+          curl -X POST -U "tongvantruong:6d7b3d256d9d31524e66dc0e0fbf76ecdfe15071" $URL
