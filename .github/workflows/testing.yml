@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Name usergram-docker-cache-{hash}
+      - name: Name usergram-docker-cache-${hash}
         run: |
           echo "123"
-          echo "usergram-docker-cache-{hash}"
+          echo "usergram-docker-cache-${hash}"
