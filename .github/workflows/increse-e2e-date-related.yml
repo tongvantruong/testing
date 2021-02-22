@@ -6,7 +6,7 @@ on:
       usergram-e2e-branch:
         description: "usergram-e2e branch"
         required: true
-        default: main
+        default: master
       number-of-days:
         description: "Number of days to increase"
         required: true
