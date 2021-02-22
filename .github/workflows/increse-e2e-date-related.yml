@@ -43,8 +43,8 @@ jobs:
 
       - name: Update md5
         run: |
-          sed -i -e "s/md5:.*/md5:${steps.extract-md5.outputs.usergram_e2e_cassandra_md5}/g" ci/volume-cassandra.zip.dvc
-          sed -i -e "s/md5:.*/md5:${steps.extract-md5.outputs.usergram_e2e_mysql_md5}/g" ci/volume-mysql.zip.dvc
+          sed -i -e "s/md5:.*/md5:${{ steps.extract-md5.outputs.usergram_e2e_cassandra_md5 }}/g" ci/volume-cassandra.zip.dvc
+          sed -i -e "s/md5:.*/md5:${{ steps.extract-md5.outputs.usergram_e2e_mysql_md5 }}/g" ci/volume-mysql.zip.dvc
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
