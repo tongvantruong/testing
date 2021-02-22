@@ -1,0 +1,39 @@
+name: Increase e2e date-related data
+
+on:
+  workflow_dispatch:
+    inputs:
+      usergram-e2e-branch:
+        description: "usergram-e2e branch"
+        required: true
+        default: master
+      number-of-days:
+        description: "Number of days to increase"
+        required: true
+        default: 30
+
+jobs:
+  change-date:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run script
+        run: |
+          echo "testing..."
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "github actions: Increase e2e date-related data"
+          title: "[e2e][auto] Increase e2e date-related data"
+          draft: false
+          labels: auto-created
+          base: main
+          body: |
+            # Why
+            - Increase e2e date-related data by ${{ github.event.inputs.number-of-days }} days
+            # What
+            - Change dates in all e2e test cases
+            - PR created automatically by https://github.com/tonvantruong/testing/actions/runs/${{ github.run_id }}
