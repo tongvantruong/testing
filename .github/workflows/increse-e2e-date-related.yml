@@ -13,14 +13,37 @@ on:
         default: 30
 
 jobs:
-  change-date:
+  update-date:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout current repo
+        uses: actions/checkout@v2
 
       - name: Run script
         run: |
           echo "testing..."
+
+      - name: Checkout usergram-e2e repo
+        uses: actions/checkout@v2
+        with:
+          repository: tongvantruong/usergram-e2e
+
+      - name: Extract md5 from usergram-e2e repo
+        id: extract-md5
+        run: |
+          usergram_e2e_cassandra_md5=$(grep 'md5:' data/cassandra/volume-cassandra.zip.dvc | sed 's/^.*: //')
+          usergram_e2e_mysql_md5=$(grep 'md5:' data/mysql/volume-mysql.zip.dvc | sed 's/^.*: //')
+
+          echo ::set-output name=usergram_e2e_cassandra_md5::$usergram_e2e_cassandra_md5
+          echo ::set-output name=usergram_e2e_mysql_md5::$usergram_e2e_mysql_md5
+
+      - name: Checkout current repo
+        uses: actions/checkout@v2
+
+      - name: Update md5
+        run: |
+          sed -i -e "s/md5:.*/md5:${steps.extract-md5.outputs.usergram_e2e_cassandra_md5}/g" ci/volume-cassandra.zip.dvc
+          sed -i -e "s/md5:.*/md5:${steps.extract-md5.outputs.usergram_e2e_mysql_md5}/g" ci/volume-mysql.zip.dvc
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
