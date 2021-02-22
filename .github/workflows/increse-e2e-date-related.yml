@@ -27,6 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: tongvantruong/usergram-e2e
+          ref: main
 
       - name: Extract md5 from usergram-e2e repo
         id: extract-md5
