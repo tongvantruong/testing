@@ -3,8 +3,8 @@ name: Increase e2e date-related data
 on:
   workflow_dispatch:
     inputs:
-      usergram-e2e-branch:
-        description: "usergram-e2e branch"
+    e2e-branch:
+        description: "e2e branch"
         required: true
         default: master
       number-of-days:
