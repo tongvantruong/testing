@@ -3,8 +3,8 @@ name: Increase e2e date-related data
 on:
   workflow_dispatch:
     inputs:
-      usergram-e2e-branch:
-        description: "usergram-e2e branch"
+        e2e-branch:
+        description: "e2e branch"
         required: true
         default: master
       number-of-days:
@@ -16,21 +16,21 @@ jobs:
   execute:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout usergram-e2e repo
+      - name: Checkout e2e repo
         uses: actions/checkout@v2
         with:
-          repository: tongvantruong/usergram-e2e
+          repository: tongvantruong/e2e
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.event.inputs.usergram-e2e-branch }}
+          ref: ${{ github.event.inputs.e2e-branch }}
 
-      - name: Extract md5 from usergram-e2e repo
+      - name: Extract md5 from e2e repo
         id: extract-md5
         run: |
-          usergram_e2e_cassandra_md5=$(grep 'md5:' data/cassandra/volume-cassandra.zip.dvc | sed 's/^.*: //')
-          usergram_e2e_mysql_md5=$(grep 'md5:' data/mysql/volume-mysql.zip.dvc | sed 's/^.*: //')
+          e2e_cassandra_md5=$(grep 'md5:' data/cassandra/volume-cassandra.zip.dvc | sed 's/^.*: //')
+          e2e_mysql_md5=$(grep 'md5:' data/mysql/volume-mysql.zip.dvc | sed 's/^.*: //')
 
-          echo ::set-output name=usergram_e2e_cassandra_md5::$usergram_e2e_cassandra_md5
-          echo ::set-output name=usergram_e2e_mysql_md5::$usergram_e2e_mysql_md5
+          echo ::set-output name=e2e_cassandra_md5::$e2e_cassandra_md5
+          echo ::set-output name=e2e_mysql_md5::$e2e_mysql_md5
 
       - name: Checkout current repo
         uses: actions/checkout@v2
@@ -41,8 +41,8 @@ jobs:
 
       - name: Update md5 for cassandra and mysql
         run: |
-          sed -i -e "s/md5:.*/md5: ${{ steps.extract-md5.outputs.usergram_e2e_cassandra_md5 }}/g" ci/volume-cassandra.zip.dvc
-          sed -i -e "s/md5:.*/md5: ${{ steps.extract-md5.outputs.usergram_e2e_mysql_md5 }}/g" ci/volume-mysql.zip.dvc
+          sed -i -e "s/md5:.*/md5: ${{ steps.extract-md5.outputs.e2e_cassandra_md5 }}/g" ci/volume-cassandra.zip.dvc
+          sed -i -e "s/md5:.*/md5: ${{ steps.extract-md5.outputs.e2e_mysql_md5 }}/g" ci/volume-mysql.zip.dvc
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v3
