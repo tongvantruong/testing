@@ -1,0 +1,14 @@
+name: Github Action
+
+on:
+  pull_request:
+
+jobs:
+  build_dev:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Testing
+        run: |
+          pr_labels="${{ github.event.pull_request.labels.*.name }}"
+          echo ${{ github.event.pull_request.labels.*.name }}
+          echo $pr_labels
