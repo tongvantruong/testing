@@ -11,4 +11,4 @@ jobs:
         run: |
           pr_labels="${{ github.event.pull_request.labels.*.name }}"
           echo ${{ github.event.pull_request.labels.*.name }}
-          echo $pr_labels
+          echo ${pr_labels[0]}
