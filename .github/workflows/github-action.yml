@@ -9,7 +9,6 @@ jobs:
     steps:
       - name: Testing
         run: |
-          pr_labels="${{ toJson(github.event.pull_request.labels.*.name) }}"
           for row in $(echo "${toJson(github.event.pull_request.labels.*.name)}" | jq -r '.[]''); do
             echo $row
           done
