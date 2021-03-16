@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: Testing
         run: |
-          pr_labels="${{ github.event.pull_request.labels.*.name }}"
+          pr_labels="${{ toJson(github.event.pull_request.labels.*.name) }}"
           echo ${{ github.event.pull_request.labels.*.name }}
-          echo ${pr_labels[0][0]}
+          echo ${pr_labels}
