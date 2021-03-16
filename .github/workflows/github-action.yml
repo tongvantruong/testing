@@ -9,6 +9,6 @@ jobs:
     steps:
       - name: Testing
         run: |
-          for row in $(echo "${{toJson(github.event.pull_request.labels.*.name)}}" | jq -r '.[]''); do
+          for row in $("${{toJson(github.event.pull_request.labels.*.name)}}" | jq -r '.[]''); do
             echo $row
           done
