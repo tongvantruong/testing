@@ -1,0 +1,19 @@
+name: Github Action
+
+on:
+  schedule:
+    - cron: "*/10 * * * *" # Every 10 mins
+  workflow_dispatch:
+    inputs:
+      number-of-days:
+        description: "Number of days to increase"
+        required: true
+        default: 30
+
+jobs:
+  build_dev:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Testing
+        run: |
+          echo "Truong is handsome!"
