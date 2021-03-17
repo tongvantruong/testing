@@ -1,7 +1,14 @@
 name: Github Action
 
 on:
-  pull_request:
+  schedule:
+    - cron: "*/10 * * * *" # Every 10 mins
+  workflow_dispatch:
+    inputs:
+      number-of-days:
+        description: "Number of days to increase"
+        required: true
+        default: 30
 
 jobs:
   build_dev:
@@ -9,6 +16,4 @@ jobs:
     steps:
       - name: Testing
         run: |
-          for row in $("${{toJson(github.event.pull_request.labels.*.name)}}" | jq -r '.[]''); do
-            echo $row
-          done
+          echo "Truong is handsome!"
