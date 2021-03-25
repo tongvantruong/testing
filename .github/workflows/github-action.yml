@@ -15,5 +15,6 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Testing
+        if: github.event_name == 'pull_request'
         run: |
           echo "Truong is handsome!"
