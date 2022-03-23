@@ -2,12 +2,20 @@ name: Dispatch E2E
 
 on:
   workflow_dispatch:
+    inputs:
+      source_comment_id:
+        description: "Comment ID that triggers this workflow"
+        default: ""
+        required: false
+        
+env:
+  SOURCE_COMMENT_ID: ${{ github.event.inputs.source_comment_id }}
 
 jobs:
-  build_dev:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
-      - name: Restart workflow
+      - name: test
         run: |
-          URL=https://api.github.com/repos/${{github.repository}}/actions/runs/1555776046/rerun
-          curl -X POST -U "tongvantruong:6d7b3d256d9d31524e66dc0e0fbf76ecdfe15071" $URL
+          echo "running e2e...."
+          echo ${SOURCE_COMMENT_ID}
