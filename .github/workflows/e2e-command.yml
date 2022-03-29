@@ -13,6 +13,7 @@ env:
 
 jobs:
   build:
+    if: ${{ inputs.source_comment_id != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: test
