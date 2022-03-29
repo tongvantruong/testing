@@ -19,7 +19,7 @@ jobs:
         run: |
           exit 1
   build:
-    if: ${{ github.event.inputs.source_comment_id != '' }}
+    if: ${{ always() && github.event.inputs.source_comment_id != '' }}
     needs: job1
     runs-on: ubuntu-latest
     steps:
